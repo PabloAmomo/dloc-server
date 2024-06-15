@@ -1,8 +1,9 @@
-import { Persistence } from '../../persistence/_Persistence';
-import { Response, ResponseCode } from "../../models/Response";
-import { PersistenceResult } from "../../persistence/models/PersistenceResult";
-import { createOkResponse } from '../../functions/createOkResponse';
 import { createErrorResponse } from '../../functions/createErrorResponse';
+import { createOkResponse } from '../../functions/createOkResponse';
+import { Persistence } from '../../persistence/_Persistence';
+import { PersistenceResult } from "../../persistence/models/PersistenceResult";
+import { Response } from "../../models/Response";
+import { ResponseCode } from '../../enums/ResponseCode';
 
 const persistenceHealth = async (persistence: Persistence) : Promise<Response> => { 
   const response: PersistenceResult = await persistence.health();
