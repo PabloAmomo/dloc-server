@@ -151,6 +151,7 @@
   "deviceSharedAdded": "Pet shared added correctly",
   "distance": "Distance",
   "editDevice": "Editing {{name}}",
+  "email": "Email",
   "emailAddress": "Email address",
   "emailHelper": "Introduce a valid email...",
   "en": "English",
@@ -175,6 +176,7 @@
   "looseData": "Unsaved data",
   "map": "Map",
   "marker": "Marker",
+  "message": "Message",
   "messageSended": "Message sended correctly...",
   "meters": "meters",
   "name": "Name",
@@ -196,7 +198,7 @@
   "save": "Save",
   "saveCanceled": "Save canceled",
   "sendUsEmail": {
-    "line1": "If you want to send the email from your email client" ,
+    "line1": "If you want to send the email from your email client",
     "line2": "👉👉 click here 👈👈"
   },
   "shared": "shared",

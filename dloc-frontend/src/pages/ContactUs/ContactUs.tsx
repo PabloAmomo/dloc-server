@@ -78,7 +78,7 @@ function ContactUs() {
         <Grid {...style.GridItemProps} item>
           <TextField
             disabled={isLoggedIn}
-            label="Name"
+            label={t("name")}
             name="name"
             value={formValues.name}
             onChange={handleInputChange}
@@ -91,7 +91,7 @@ function ContactUs() {
         <Grid {...style.GridItemProps} item>
           <TextField
             disabled={isLoggedIn}
-            label="Email"
+            label={t("email")}
             name="email"
             type="email"
             value={formValues.email}
@@ -104,7 +104,7 @@ function ContactUs() {
 
         <Grid {...style.GridItemProps} item>
           <TextField
-            label="Message"
+            label={t("message")}
             name="message"
             value={formValues.message}
             onChange={handleInputChange}
