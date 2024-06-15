@@ -1,15 +1,15 @@
 import { Button, Grid, Link, TextField } from '@mui/material';
+import { logError } from 'functions/logError';
 import { SendEmailResult } from 'models/sendEmailResult';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUserContext } from 'providers/UserProvider';
+import contactUs from 'services/contactUs/contactUs';
 import isEmail from 'functions/isEmail';
 import PageContainer from 'components/PageContainer/PageContainer';
-import contactUs from 'services/contactUs/contactUs';
 import showAlert from 'functions/showAlert';
 import style from './Contact.style';
-import { logError } from 'functions/logError';
-import { Navigate, useNavigate } from 'react-router-dom';
 
 function Contact() {
   const { user, isLoggedIn } = useUserContext();
@@ -46,7 +46,6 @@ function Contact() {
       return;
     }
 
-    // TODO: Send the formValues to the server and if OK, call sendOk() if Error, show an error message
     contactUs({
       ...formValues,
       callback: (response: SendEmailResult) => {
@@ -68,7 +67,7 @@ function Contact() {
 
   return (
     <PageContainer {...style.PageProps}>
-      <Grid container spacing={2} {...style.GridContainer}>
+      <Grid container spacing={2} {...style.GridContainerProps}>
         <Grid {...style.GridItemProps} item>
           <Link href="mailto:info@maiPet.es" underline='none' color={'primary'} variant="h6" textAlign={'center'}>
             {t('sendUsEmail.line1')}<br />
@@ -79,55 +78,52 @@ function Contact() {
         <Grid {...style.GridItemProps} item>
           <TextField
             disabled={isLoggedIn}
-            fullWidth
             label="Name"
             name="name"
             value={formValues.name}
             onChange={handleInputChange}
             margin="normal"
-            variant="outlined"
             required
+            {...style.TextFieldProps}
           />
         </Grid>
 
         <Grid {...style.GridItemProps} item>
           <TextField
             disabled={isLoggedIn}
-            fullWidth
             label="Email"
             name="email"
             type="email"
             value={formValues.email}
             onChange={handleInputChange}
             margin="normal"
-            variant="outlined"
             required
+            {...style.TextFieldProps}
           />
         </Grid>
 
         <Grid {...style.GridItemProps} item>
           <TextField
-            fullWidth
             label="Message"
             name="message"
             value={formValues.message}
             onChange={handleInputChange}
             margin="normal"
-            variant="outlined"
             required
             multiline
             rows={8}
+            {...style.TextFieldProps}
           />
         </Grid>
 
         <Grid {...style.GridItemProps} item xs={12}>
           <Grid xs={6} item textAlign={'start'}>
-          <Button variant="outlined" color="primary" {...style.ButtonAction} onClick={clickOnReturn}>
+          <Button {...style.ButtonActionProps} onClick={clickOnReturn}>
               {t('return')}
             </Button>
           </Grid>
           <Grid xs={6} item textAlign={'end'}>
-            <Button variant="contained" color="primary" {...style.ButtonAction} onClick={clickOnSend} disabled={!validForm}>
+            <Button {...style.ButtonActionProps} onClick={clickOnSend} disabled={!validForm}>
               {t('send')}
             </Button>
           </Grid>

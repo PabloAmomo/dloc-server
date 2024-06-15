@@ -6,8 +6,13 @@ const ProfileStyle = {
     sx: { display: 'flex', justifyContent: 'center' } as SxProps,
     xs: 12 as GridSize,
   },
-  GridContainer: { sx: { padding: '1em!important', maxWidth: '490px', mt: 2 } as SxProps },
-  ButtonAction: { sx: { width: '16ch' } as SxProps },
+  GridContainerProps: { sx: { padding: '1em!important', maxWidth: '490px', mt: 2 } as SxProps },
+  ButtonActionProps: {
+    sx: { width: '16ch' } as SxProps,
+    variant: 'contained' as 'contained' | 'text' | 'outlined',
+    color: 'primary' as 'inherit' | 'primary' | 'error' | 'success' | 'warning' | 'info' | 'secondary',
+  },
+  TextFieldProps: { sx: { width: '100%' } as SxProps, variant: 'outlined' as 'outlined' | 'standard' | 'filled' },
 };
 
 export default ProfileStyle;
