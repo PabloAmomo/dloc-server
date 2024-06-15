@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ResponseCode } from '../../enums/ResponseCode';
 import multer from 'multer';
 
 /** Filter if the file is an image */
@@ -25,9 +26,9 @@ const uploadImage = async (name: string, upladPath: string, req: Request, res: R
 
   /** Upload */
   upload(req, res, (err) => {
-    if (err instanceof multer.MulterError || err) return res.status(400).json({ error: err.message });
+    if (err instanceof multer.MulterError || err) return res.status(ResponseCode.BAD_REQUEST).json({ error: err.message });
     /** File uploaded */
-    res.status(200).json({ data: { update: true } });
+    res.status(ResponseCode.OK).json({ data: { update: true } });
   });
 };
 

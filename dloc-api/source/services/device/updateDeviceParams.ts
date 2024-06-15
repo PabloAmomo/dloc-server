@@ -8,6 +8,7 @@ import { getDeviceParams } from '../../persistence/mySql/getDeviceParams';
 import { GetDeviceParamsResult } from '../../persistence/models/GetDeviceParamsResult';
 import { Persistence } from '../../persistence/_Persistence';
 import { Response } from '../../models/Response';
+import { ResponseCode } from '../../enums/ResponseCode';
 import { SaveDeviceParamsResult } from '../../persistence/models/SaveDeviceParamsResult';
 
 const updateDeviceParams = async (imei: string, userId: string, deviceParams: DeviceParams, persistence: Persistence): Promise<Response> => {
@@ -17,8 +18,8 @@ const updateDeviceParams = async (imei: string, userId: string, deviceParams: De
   let getDeviceParamsResult: GetDeviceParamsResult = await getDeviceParams(imei, userId, encriptionHelper);
 
   /** Check errors */
-  if (getDeviceParamsResult.error) return createErrorResponse(500, getDeviceParamsResult.error.message, errorRetVal);
-  if (!getDeviceParamsResult.results) return createErrorResponse(400, 'device not found', errorRetVal);
+  if (getDeviceParamsResult.error) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, getDeviceParamsResult.error.message, errorRetVal);
+  if (!getDeviceParamsResult.results) return createErrorResponse(ResponseCode.BAD_REQUEST, 'device not found', errorRetVal);
 
   /** Get current device params and get added and removed Shared */
   const currentDeviceParams: DeviceParams = getDeviceParamsResult.results;
@@ -32,18 +33,18 @@ const updateDeviceParams = async (imei: string, userId: string, deviceParams: De
   /** Add or remove sharedWiths */
   for (let email of addedsItemsToSharedWiths) {
     const response = await addShareDevice(imei, userId, email, persistence);
-    if (response.code !== 200) return createErrorResponse(500, 'error adding shared device', errorRetVal);
+    if (response.code !== 200) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error adding shared device', errorRetVal);
   }
   for (let email of removedItemsFromSharedWiths) {
     const response = await deleteShareDevice(imei, userId, email, persistence);
-    if (response.code !== 200) return createErrorResponse(500, 'error deleting shared device', errorRetVal);
+    if (response.code !== 200) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error deleting shared device', errorRetVal);
   }
 
   /** Save Device Params */
   const response: SaveDeviceParamsResult = await persistence.saveDeviceParams(imei, userId, deviceParams, encriptionHelper);
 
   /** Process */
-  if (response?.error?.message) return createErrorResponse(500, response.error.message, errorRetVal);
+  if (response?.error?.message) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, response.error.message, errorRetVal);
 
   /** All Ok */
   return createOkResponse({ update: true });

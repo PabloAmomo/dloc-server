@@ -1,13 +1,14 @@
-import { checkToken } from '../../functions/checkToken';
-import { createImageName } from '../../functions/createImageName';
-import { deleteImage } from './deleteImage';
-import { encriptionHelper } from '../../functions/encriptionHelper';
-import { getImage } from './getImage';
-import { getPersistence } from '../../persistence/persistence';
-import { getTokenAndAuthFromReq } from '../../functions/getTokenAndAuthFromReq';
+import { checkToken } from '../functions/checkToken';
+import { createImageName } from '../functions/createImageName';
+import { deleteImage } from '../services/device/deleteImage';
+import { encriptionHelper } from '../functions/encriptionHelper';
+import { getImage } from '../services/device/getImage';
+import { getPersistence } from '../persistence/persistence';
+import { getTokenAndAuthFromReq } from '../functions/getTokenAndAuthFromReq';
 import { Request, Response } from 'express';
-import { uploadImage } from './uploadImage';
-import { UserData } from '../../models/UserData';
+import { ResponseCode } from '../enums/ResponseCode';
+import { uploadImage } from '../services/device/uploadImage';
+import { UserData } from '../models/UserData';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -32,7 +33,7 @@ const imageActions: ImageActionsProps = async (type, req, res) => {
 
   /** Upload folder */
   const uploadPath = path.join(`${process.cwd()}/`, `${UPLOAD_FOLDER}/`);
-  
+
   if (!imei && type === ImageActionsType.GET) {
     getImage('no-image', uploadPath, type === ImageActionsType.GET ? false : true, req, res);
     return;
@@ -41,12 +42,12 @@ const imageActions: ImageActionsProps = async (type, req, res) => {
   /** validate user for upload */
   const userData: UserData = await checkToken({ ...getTokenAndAuthFromReq(req), persistence: getPersistence(), encription: encriptionHelper });
   if (!userData.userId && type === ImageActionsType.UPLOAD && imei !== TEST_IMEI) {
-    res.status(401).json({ error: 'Unauthorized' });
+    res.status(ResponseCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
     return;
   }
 
   /** validate imei and upload */
-  if (!imei) res.status(400).json({ error: 'imei is required' });
+  if (!imei) res.status(ResponseCode.BAD_REQUEST).json({ error: 'imei is required' });
   else {
     const name = createImageName(imei);
     if (type === ImageActionsType.UPLOAD) {
@@ -54,8 +55,11 @@ const imageActions: ImageActionsProps = async (type, req, res) => {
     } else if (type === ImageActionsType.GET || type === ImageActionsType.DOWNLOAD) {
       getImage(name, uploadPath, type === ImageActionsType.GET ? false : true, req, res);
     } else if (type === ImageActionsType.DELETE) {
-      deleteImage(name, uploadPath, req, res);
-    } 
+      deleteImage(name, uploadPath).then((response: boolean) => {
+        if (response) res.status(ResponseCode.OK).json({ data: { delete: true } });
+        else res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({ error: 'Error deleting image' });
+      });
+    }
   }
 };
 

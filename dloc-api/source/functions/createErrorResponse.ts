@@ -1,6 +1,7 @@
 import { Response } from "../models/Response";
+import { ResponseCode } from "../enums/ResponseCode";
 
-const createErrorResponse = (code: number, message: string, data: any): Response => {
+const createErrorResponse = (code: ResponseCode, message: string, data: any): Response => {
   return { code, result: { data, message } };
 };
 

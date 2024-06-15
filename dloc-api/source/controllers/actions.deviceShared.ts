@@ -1,11 +1,12 @@
-import { addShareDevice } from './addShareDevice';
-import { checkToken } from '../../functions/checkToken';
-import { deleteShareDevice } from './deleteShareDevice';
-import { getPersistence } from '../../persistence/persistence';
-import { getTokenAndAuthFromReq } from '../../functions/getTokenAndAuthFromReq';
+import { addShareDevice } from '../services/device/addShareDevice';
+import { checkToken } from '../functions/checkToken';
+import { deleteShareDevice } from '../services/device/deleteShareDevice';
+import { encriptionHelper } from '../functions/encriptionHelper';
+import { getPersistence } from '../persistence/persistence';
+import { getTokenAndAuthFromReq } from '../functions/getTokenAndAuthFromReq';
 import { Request, Response } from 'express';
-import { UserData } from '../../models/UserData';
-import { encriptionHelper } from '../../functions/encriptionHelper';
+import { ResponseCode } from '../enums/ResponseCode';
+import { UserData } from '../models/UserData';
 
 export enum DeviceSharedActionsType {
   ADD = 'ADD',
@@ -19,13 +20,13 @@ const deviceSharedActions: DeviceSharedActionsProps = async (type, req, res) => 
   /** validate user */
   const userData: UserData = await checkToken({ ...getTokenAndAuthFromReq(req), persistence: getPersistence(), encription: encriptionHelper });
   if (!userData.userId) {
-    res.status(401).json({ error: 'unauthorized' });
+    res.status(ResponseCode.UNAUTHORIZED).json({ error: 'unauthorized' });
     return;
   }
 
   /** validate imei and email */
   if (!imei || imei === '' || !email || email === '') {
-    res.status(400).json({ error: 'imei and email is required' });
+    res.status(ResponseCode.BAD_REQUEST).json({ error: 'imei and email is required' });
     return;
   }
 

@@ -11,6 +11,7 @@ import { GetDeviceOwnerStateResult } from '../../persistence/models/GetDeviceWon
 import { GetDeviceResult } from '../../persistence/models/GetDeviceResult';
 import { Persistence } from '../../persistence/_Persistence';
 import { Response } from '../../models/Response';
+import { ResponseCode } from '../../enums/ResponseCode';
 import { sendDeleteSharedDeviceEmail } from '../../functions/sendDeleteSharedDeviceEmail';
 
 const deleteShareDevice = async (imei: string, userId: string, email: string, persistence: Persistence): Promise<Response> => {
@@ -20,8 +21,8 @@ const deleteShareDevice = async (imei: string, userId: string, email: string, pe
   const responseDevice: GetDeviceResult = await persistence.getDevice(imei, userId, encriptionHelper);
   const device: DeviceUser = responseDevice?.results?.[0] as DeviceUser;
   const message = responseDevice?.error?.message ?? '';
-  if (!device || message === 'device not found') return createErrorResponse(404, 'device not found', errorRetVal);
-  else if (message !== '') return createErrorResponse(500, message, errorRetVal);
+  if (!device || message === 'device not found') return createErrorResponse(ResponseCode.NOT_FOUND, 'device not found', errorRetVal);
+  else if (message !== '') return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, message, errorRetVal);
 
   /** Create de imei to share encripted in MD5 */
   const sharedImeiId = createSharedImei(imei, email);
@@ -32,9 +33,9 @@ const deleteShareDevice = async (imei: string, userId: string, email: string, pe
   const getDeviceOwnerStateResult: GetDeviceOwnerStateResult = await getDeviceOwnerState(imei);
 
   /** Check errors */
-  if (getDeviceOwnerStateResult.state === DeviceOwnerStates.error) return createErrorResponse(500, 'error consulting availability', errorRetVal);
-  if (getDeviceOwnerStateResult.state === DeviceOwnerStates.notfound) return createErrorResponse(404, 'device not found', errorRetVal);
-  if (getDeviceOwnerStateResult.userAssigned !== userId) return createErrorResponse(401, 'user not authorized to delete this device', errorRetVal);
+  if (getDeviceOwnerStateResult.state === DeviceOwnerStates.error) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error consulting availability', errorRetVal);
+  if (getDeviceOwnerStateResult.state === DeviceOwnerStates.notfound) return createErrorResponse(ResponseCode.NOT_FOUND, 'device not found', errorRetVal);
+  if (getDeviceOwnerStateResult.userAssigned !== userId) return createErrorResponse(ResponseCode.UNAUTHORIZED, 'user not authorized to delete this device', errorRetVal);
 
   /** Delete */
   const deleteShareDeviceResult = await persistence.deleteShareDevice(imei, sharedImeiId);
@@ -43,11 +44,11 @@ const deleteShareDevice = async (imei: string, userId: string, email: string, pe
   const deleteShareDeviceCodeResult: DeleteShareDeviceCodeResult = await persistence.deleteShareDeviceCode(sharedImeiId);
 
   /** Check errors */
-  if (deleteShareDeviceResult.error) return createErrorResponse(500, deleteShareDeviceResult.error.message, errorRetVal);
-  if (!deleteShareDeviceResult.results) return createErrorResponse(500, 'error deleting shared device', errorRetVal);
+  if (deleteShareDeviceResult.error) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, deleteShareDeviceResult.error.message, errorRetVal);
+  if (!deleteShareDeviceResult.results) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error deleting shared device', errorRetVal);
 
-  if (deleteShareDeviceCodeResult.error) return createErrorResponse(500, deleteShareDeviceCodeResult.error.message, errorRetVal);
-  if (!deleteShareDeviceCodeResult.results) return createErrorResponse(500, 'error deleting shared device code', errorRetVal);
+  if (deleteShareDeviceCodeResult.error) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, deleteShareDeviceCodeResult.error.message, errorRetVal);
+  if (!deleteShareDeviceCodeResult.results) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error deleting shared device code', errorRetVal);
 
   /** Send email */
   await sendDeleteSharedDeviceEmail(email, name);

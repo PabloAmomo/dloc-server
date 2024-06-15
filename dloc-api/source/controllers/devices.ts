@@ -1,12 +1,13 @@
 import { checkToken } from '../functions/checkToken';
-import { DeviceActionsType, deviceActions } from '../services/device/actions.device';
-import { DeviceSharedActionsType, deviceSharedActions } from '../services/device/actions.deviceShared';
+import { DeviceActionsType, deviceActions } from './actions.device';
+import { DeviceSharedActionsType, deviceSharedActions } from './actions.deviceShared';
 import { encriptionHelper } from '../functions/encriptionHelper';
 import { getDevice } from '../services/device/getDevice';
 import { getDevices } from '../services/device/getDevices';
 import { getPersistence } from '../persistence/persistence';
 import { getTokenAndAuthFromReq } from '../functions/getTokenAndAuthFromReq';
-import { ImageActionsType, imageActions } from '../services/device/actions.image';
+import { ImageActionsType, imageActions } from './actions.image';
+import { ResponseCode } from '../enums/ResponseCode';
 import { UserData } from '../models/UserData';
 import express, { Request, Response } from 'express';
 
@@ -54,7 +55,7 @@ routers.get('/devices/:id', async (req, res, next) => {
   if (!userData) return;
 
   /** validate imei and get positions */
-  if (!imei) res.status(400).json({ error: 'imei is required' });
+  if (!imei) res.status(ResponseCode.BAD_REQUEST).json({ error: 'imei is required' });
   else getDevice(imei, userData.userId, getPersistence()).then((response) => res.status(response.code).json(response.result));
 });
 routers.put('/devices/:id', async (req, res, next) => deviceActions(DeviceActionsType.UPDATE, req, res));
@@ -66,7 +67,7 @@ export default routers;
 const validateUser = async (req: Request, res: Response): Promise<undefined | UserData> => {
   const userData: UserData = await checkToken({ ...getTokenAndAuthFromReq(req), persistence: getPersistence(), encription: encriptionHelper });
   if (!userData.userId) {
-    res.status(401).json({ error: 'unauthorized' });
+    res.status(ResponseCode.UNAUTHORIZED).json({ error: 'unauthorized' });
     return;
   }
   return userData;

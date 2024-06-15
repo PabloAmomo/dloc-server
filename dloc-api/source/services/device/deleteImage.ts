@@ -1,13 +1,18 @@
-import { Request, Response } from 'express';
+import { printMessage } from '../../functions/printMessage';
 import fs from 'fs';
 
 /** Delete an image */
-const deleteImage = async (name: string, uploadPath: string, req: Request, res: Response) => {
+const deleteImage = async (name: string, uploadPath: string): Promise<boolean> => {
   let file = `${uploadPath}${name}.png`;
 
-  if (fs.existsSync(file)) fs.unlinkSync(file);
+  try {
+    if (fs.existsSync(file)) fs.unlinkSync(file);
+  } catch (error: any) {
+    printMessage(`Error deleting image ${name}.png: ${error?.message ?? error}`);
+    return false;
+  }
 
-  res.status(200).json({ data: { delete: true } });
+  return true;
 };
 
 export { deleteImage };

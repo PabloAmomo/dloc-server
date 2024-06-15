@@ -9,6 +9,7 @@ import { encriptionHelper } from '../../functions/encriptionHelper';
 import { GetDeviceResult } from '../../persistence/models/GetDeviceResult';
 import { Persistence } from '../../persistence/_Persistence';
 import { Response } from '../../models/Response';
+import { ResponseCode } from '../../enums/ResponseCode';
 import { sendAddSharedDeviceEmail } from '../../functions/sendAddSharedDeviceEmail';
 import * as crypto from 'crypto';
 
@@ -19,11 +20,11 @@ const addShareDevice = async (imei: string, userId: string, email: string, persi
   const device: DeviceUser = response?.results?.[0] as DeviceUser;
 
   const message = response?.error?.message ?? '';
-  if (!device || message === 'device not found') return createErrorResponse(404, message, errorRetVal);
-  else if (message !== '') return createErrorResponse(500, message, errorRetVal);
+  if (!device || message === 'device not found') return createErrorResponse(ResponseCode.NOT_FOUND, message, errorRetVal);
+  else if (message !== '') return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, message, errorRetVal);
 
   /** Is a shared device */
-  if (device.isShared) return createErrorResponse(400, 'device is shared device', errorRetVal);
+  if (device.isShared) return createErrorResponse(ResponseCode.BAD_REQUEST, 'device is shared device', errorRetVal);
 
   /** Create de imei to share encripted in MD5 */
   const sharedImeiId = createSharedImei(imei, email);
@@ -39,13 +40,13 @@ const addShareDevice = async (imei: string, userId: string, email: string, persi
     { name, markerColor, pathColor, startTrack, endTrack, sharedWiths: [], hasImage: false },
     encriptionHelper
   );
-  if (addShareDeviceResult.error) return createErrorResponse(500, addShareDeviceResult.error.message, errorRetVal);
-  if (!addShareDeviceResult.results) return createErrorResponse(500, 'error sharing device', errorRetVal);
+  if (addShareDeviceResult.error) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, addShareDeviceResult.error.message, errorRetVal);
+  if (!addShareDeviceResult.results) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error sharing device', errorRetVal);
 
   /** Add verification code */
   const addShareDeviceCodeResult: AddShareDeviceCodeResult = await persistence.addShareDeviceCode(sharedImeiId, verificationCode);
-  if (addShareDeviceCodeResult.error) return createErrorResponse(500, addShareDeviceCodeResult.error.message, errorRetVal);
-  if (!addShareDeviceCodeResult.results) return createErrorResponse(500, 'error adding verification code', errorRetVal);
+  if (addShareDeviceCodeResult.error) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, addShareDeviceCodeResult.error.message, errorRetVal);
+  if (!addShareDeviceCodeResult.results) return createErrorResponse(ResponseCode.INTERNAL_SERVER_ERROR, 'error adding verification code', errorRetVal);
 
   /** Send email */
   await sendAddSharedDeviceEmail(email, sharedImeiId, deviceParams.name, verificationCode);

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ResponseCode } from '../../enums/ResponseCode';
 import fs from 'fs';
 
 const getImage = async (name: string, uploadPath: string, download: boolean, req: Request, res: Response) => {
@@ -9,14 +10,14 @@ const getImage = async (name: string, uploadPath: string, download: boolean, req
 
   if (download) {
     res.download(file, (err) => {
-      if (err) res.status(404).json({ error: err.message });
+      if (err) res.status(ResponseCode.NOT_FOUND).json({ error: err.message });
     });
     return;
   }
 
   fs.readFile(file, (err, data) => {
-    if (err) res.status(404).json({ error: 'image not found' });
-    else res.writeHead(200, { 'Content-Type': 'image/jpeg' }).end(data);
+    if (err) res.status(ResponseCode.NOT_FOUND).json({ error: 'image not found' });
+    else res.writeHead(ResponseCode.OK, { 'Content-Type': 'image/jpeg' }).end(data);
   });
 };
 

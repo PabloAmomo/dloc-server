@@ -1,14 +1,15 @@
-import { addDevice } from './addDevice';
-import { checkToken } from '../../functions/checkToken';
-import { deleteDevice } from './deleteDevice';
-import { DeviceParams } from '../../persistence/entities/DeviceParams';
-import { DeviceParamsMappers } from '../../mappers/DeviceParamsMappers';
-import { getPersistence } from '../../persistence/persistence';
-import { getTokenAndAuthFromReq } from '../../functions/getTokenAndAuthFromReq';
+import { addDevice } from '../services/device/addDevice';
+import { checkToken } from '../functions/checkToken';
+import { deleteDevice } from '../services/device/deleteDevice';
+import { DeviceParams } from '../persistence/entities/DeviceParams';
+import { DeviceParamsMappers } from '../mappers/DeviceParamsMappers';
+import { encriptionHelper } from '../functions/encriptionHelper';
+import { getPersistence } from '../persistence/persistence';
+import { getTokenAndAuthFromReq } from '../functions/getTokenAndAuthFromReq';
 import { Request, Response } from 'express';
-import { updateDeviceParams } from './updateDeviceParams';
-import { UserData } from '../../models/UserData';
-import { encriptionHelper } from '../../functions/encriptionHelper';
+import { ResponseCode } from '../enums/ResponseCode';
+import { updateDeviceParams } from '../services/device/updateDeviceParams';
+import { UserData } from '../models/UserData';
 
 export enum DeviceActionsType {
   ADD = 'ADD',
@@ -24,25 +25,25 @@ const deviceActions : DeviceActionsProps = async (type, req, res) => {
     params = DeviceParamsMappers.fromReqBodyParams(req.body?.params, DeviceParamsMappers.getDefaultValue());
   } catch (error: any) {
     console.error(error.message);
-    res.status(500).json({ error: error.message });
+    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({ error: error.message });
     return;
   }
   
   /** validate user */
   const userData: UserData = await checkToken({ ...getTokenAndAuthFromReq(req), persistence: getPersistence(), encription: encriptionHelper });
   if (!userData.userId) {
-    res.status(401).json({ error: 'unauthorized' });
+    res.status(ResponseCode.UNAUTHORIZED).json({ error: 'unauthorized' });
     return;
   }
 
   /** validate imei and params */
   if (type !== 'DELETE' && (!params.name || !params.markerColor || !params.pathColor || !params.startTrack || !params.endTrack)) {
-    res.status(400).json({ error: 'name, markerColor, pathColor, startTrack and endTrack are required' });
+    res.status(ResponseCode.BAD_REQUEST).json({ error: 'name, markerColor, pathColor, startTrack and endTrack are required' });
     return;
   }
 
   /** validate imei */
-  if (!imei) res.status(400).json({ error: 'imei is required' });
+  if (!imei) res.status(ResponseCode.BAD_REQUEST).json({ error: 'imei is required' });
   /** execute query */ else {
     if (type === DeviceActionsType.ADD) {
       addDevice(imei, userData, req.body?.verificationCode ?? '', params, getPersistence()).then((response) =>
