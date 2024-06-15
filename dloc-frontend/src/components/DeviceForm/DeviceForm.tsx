@@ -4,6 +4,7 @@ import { CopyAll, Delete, Edit, SettingsBackupRestore, ShareTwoTone } from '@mui
 import { Device } from 'models/Device';
 import { DialogActions, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@mui/material';
 import { IconType } from 'enums/IconType';
+import { NO_IMAGE_URL, REGEX_INPUT_IMEI, MAX_IMAGE_SIZE } from './DeviceForm.const';
 import { SharedWith } from 'models/SharedWith';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,10 +25,6 @@ import TransitionDialogFromDown from 'components/TransitionDialogFromDown/Transi
 import TypeSelector from 'components/TypeSelector/TypeSelector';
 import useDeleteDeviceHook from 'hooks/DeleteDeviceHook';
 import useDeviceFormHook from 'hooks/DeviceFormHook';
-
-const NO_IMAGE_URL = '';
-const REGEX_INPUT_IMEI = /^[0-9]{0,15}$/;
-const MAX_IMAGE_SIZE = 250;
 
 const DeviceForm = (props: DeviceFormProps) => {
   const { device: workDevice, onClose } = props;
