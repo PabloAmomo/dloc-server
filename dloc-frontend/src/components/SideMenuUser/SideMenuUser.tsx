@@ -1,4 +1,4 @@
-import { AssignmentInd, Logout } from '@mui/icons-material';
+import { AssignmentInd, ContactMail, Logout } from '@mui/icons-material';
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ const SideMenuUser = (props: SideMenuUserProps) => {
   const navigate = useNavigate();
 
   const clickOnProfile = () => navigate('/profile');
+  const clickContactUs = () => navigate('/contact');
 
   return (
     <>
@@ -22,6 +23,16 @@ const SideMenuUser = (props: SideMenuUserProps) => {
           </ListItemButton>
         </ListItem>
       </List>
+      <Divider />
+
+      <ListItem disablePadding>
+        <ListItemButton onClick={clickContactUs}>
+          <ListItemIcon>
+            <ContactMail htmlColor={style.IconColor} />
+          </ListItemIcon>
+          <ListItemText primary={t('contactUs')} />
+        </ListItemButton>
+      </ListItem>
       <Divider />
 
       <List>

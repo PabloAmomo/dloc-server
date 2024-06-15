@@ -6,12 +6,12 @@ const NavMenuStyle = {
   },
 
   LogoContainerProps: {
-    sx: { pl: 1, pt: '8px' } as SxProps,
+    sx: { pl: 1, pt: '8px', cursor: 'pointer' } as SxProps,
   },
   LogoSize: 48 as number,
 
   AppTitleContainerProps: {
-    sx: { pl: 1, pt: 1, display: 'flex', justifyContent: 'start', flexDirection: 'column', alignItems: 'left' } as SxProps,
+    sx: { pl: 1, pt: 1, display: 'flex', justifyContent: 'start', flexDirection: 'column', alignItems: 'left',cursor: 'pointer' } as SxProps,
   },
   AvatarContainerProps: {
     sx: { display: 'flex', justifyContent: 'center', alignItems: 'center', pr: 3 } as SxProps,
