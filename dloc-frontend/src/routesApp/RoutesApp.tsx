@@ -9,7 +9,7 @@ import Privacy from 'pages/Privacy/Privacy';
 import Profile from 'pages/Profile/Profile';
 import ProtectedRoute from 'components/ProtectRoute/ProtectRoute';
 import Terms from 'pages/Terms/Terms';
-import Contact from 'pages/Contact/Contact';
+import ContactUs from 'pages/ContactUs/ContactUs';
 
 const RoutesApp = () => {
   return (
@@ -29,7 +29,8 @@ const RoutesApp = () => {
         <Route path="/auth" element={<Auth />} />
 
         {/* Public Routes */}
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/contactus" element={<ContactUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/logout/forced" element={<Logout />} />

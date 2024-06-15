@@ -9,9 +9,9 @@ import contactUs from 'services/contactUs/contactUs';
 import isEmail from 'functions/isEmail';
 import PageContainer from 'components/PageContainer/PageContainer';
 import showAlert from 'functions/showAlert';
-import style from './Contact.style';
+import style from './ContactUs.style';
 
-function Contact() {
+function ContactUs() {
   const { user, isLoggedIn } = useUserContext();
   const { t } = useTranslation();
   const [formValues, setFormValues] = useState({ name: user.profile.name, email: user.profile.email, message: '' });
@@ -133,4 +133,4 @@ function Contact() {
   );
 }
 
-export default Contact;
+export default ContactUs;
