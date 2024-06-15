@@ -12,6 +12,8 @@ export interface ConfigApp {
   microsoftAuth0ClientId: string;
   facebookAuth0AppId: string;
   
+  constactUsEmail: string;
+  
   defaultInterval: number;
   deviceSelectablesTypes: IconType[];
   deviceUnselectedOpacity: number;

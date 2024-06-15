@@ -1,4 +1,5 @@
 import { Button, Grid, Link, TextField } from '@mui/material';
+import { configApp } from 'config/configApp';
 import { logError } from 'functions/logError';
 import { SendEmailResult } from 'models/sendEmailResult';
 import { useEffect, useRef, useState } from 'react';
@@ -69,7 +70,7 @@ function ContactUs() {
     <PageContainer {...style.PageProps}>
       <Grid container spacing={2} {...style.GridContainerProps}>
         <Grid {...style.GridItemProps} item>
-          <Link href="mailto:info@maiPet.es" underline='none' color={'primary'} variant="h6" textAlign={'center'}>
+          <Link href={`mailto:${configApp.constactUsEmail}`} {...style.EmailLinkProps}>
             {t('sendUsEmail.line1')}<br />
             {t('sendUsEmail.line2')}
           </Link>
@@ -111,7 +112,7 @@ function ContactUs() {
             margin="normal"
             required
             multiline
-            rows={8}
+            rows={4}
             {...style.TextFieldProps}
           />
         </Grid>

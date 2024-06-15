@@ -10,13 +10,16 @@ export const configApp: ConfigApp = {
   appName: APP_NAME,
   cookieName: APP_NAME,
 
+  // Define the Contact Us Email
+  constactUsEmail: import.meta.env.VITE_REACT_APP_CONTACT_US_EMAIL ?? '',
+
   // API Server (Defined in .env)
   apiUrl: import.meta.env.VITE_REACT_API_HTTP_HOST ?? '',
 
   // Define the Google Auth0 Client ID and the Profile URL
   googleAuht0ClientId: import.meta.env.VITE_REACT_APP_GOOGLE_AUTH0_CLIENT_ID ?? '',
   googleProfileUrl: 'https://www.googleapis.com/oauth2/v1/userinfo',
-
+  
   // Define the Microsoft Auth0 Client ID and the Profile URL
   microsoftProfileUrl: import.meta.env.VITE_REACT_APP_MICROSOFT_AUTH0_URL ?? '',
   microsoftAuth0ClientId: import.meta.env.VITE_REACT_APP_MICROSOFT_AUTH0_CLIENT_ID ?? '',
