@@ -13,10 +13,10 @@ import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import CircularLoading from 'components/CircularLoading/CircularLoading';
 import CloseIcon from '@mui/icons-material/Close';
 import ColorPicker from 'components/ColorPicker/ColorPicker';
-import ConfigInstructions from 'components/ConfigInstructions/ConfigInstructions';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import DialogEmailForm from 'components/DialogEmailForm/DialogEmailForm';
 import getNoImagePath from 'functions/getNoImagePath';
+import PlatformInstructions from 'components/PlatformInstructions/PlatformInstructions';
 import resizeImageFile from 'functions/resizeImageFile';
 import showAlert from 'functions/showAlert';
 import style from './DeviceForm.style';
@@ -191,7 +191,7 @@ const DeviceForm = (props: DeviceFormProps) => {
       <input type="file" id="deviceform-fileinputimage" onChange={handleFileInputImageChange} style={{ display: 'none' }} />
 
       {/* Config Instructions */}
-      <ConfigInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} />
+      <PlatformInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} textKey="instructions" stepsKey="instructions" preStepKey="instructions" />
 
       {/* Dialog Email Form */}
       <DialogEmailForm
@@ -245,7 +245,7 @@ const DeviceForm = (props: DeviceFormProps) => {
 
         <DialogContent>
           <form autoComplete="off" noValidate onSubmit={(event) => event.preventDefault()}>
-            <Grid container spacing={2} pt={isSharedDevice ? 1 : .5}>
+            <Grid container spacing={2} pt={isSharedDevice ? 1 : 0.5}>
               {/* IMEI */}
               {!isSharedDevice && !device.imei.startsWith('S') && (
                 <Grid item xs={12} display={'flex'} flexDirection={'row'}>
@@ -402,7 +402,7 @@ const DeviceForm = (props: DeviceFormProps) => {
         </DialogContent>
 
         <DialogActions {...style.DialogActionsProps}>
-          {/* DELETE BUTTON */}
+          {/* DELETE BUTTO / INSTRUCTIONS BUTTON */}
           {!isNewDevice ? (
             <Button color="error" {...style.ActionButtonProps} disabled={isSaving} onClick={clickOnDelete}>
               {t('delete')}

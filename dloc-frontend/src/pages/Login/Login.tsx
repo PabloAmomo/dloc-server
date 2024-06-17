@@ -1,25 +1,22 @@
 import { Box, CircularProgress, Grid, Link, SxProps, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUserContext } from 'providers/UserProvider';
+import PlatformInstructions from 'components/PlatformInstructions/PlatformInstructions';
+import IMAGE_LIST from './Login.const';
 import LoginButtonFacebook from 'components/LoginButtonFacebook/LoginButtonFacebook';
 import LoginButtonGoogle from 'components/LoginButtonGoogle/LoginButtonGoogle';
 import LoginButtonMicrosoft from 'components/LoginButtonMicrosoft/LoginButtonMicrosoft';
 import PageContainer from 'components/PageContainer/PageContainer';
-import PolaroidCarrusel, { PolaroidCarruselImage } from 'components/PolaroidCarrusel/PolaroidCarrusel';
+import PolaroidCarrusel from 'components/PolaroidCarrusel/PolaroidCarrusel';
 import style from './Login.style';
 
-const IMAGE_LIST: PolaroidCarruselImage[] = [1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
-  src: `images/carrusel/image-${i < 10 ? '0' + i : i}.webp`,
-  alt: `pet-photo-${i}`,
-  title: '',
-}));
-
 const Login = () => {
-  const navigate = useNavigate();
-  const { user, isLogingIn, isLoggedIn } = useUserContext();
+  const [isConfigInstructionsOpen, setIsConfigInstructionsOpen] = useState(false);
   const { t } = useTranslation();
+  const { user, isLogingIn, isLoggedIn } = useUserContext();
+  const navigate = useNavigate();
 
   const checkIfLoggedIn = () => {
     if (!isLoggedIn) return;
@@ -48,8 +45,15 @@ const Login = () => {
     </Typography>
   );
 
+  /** Open Config Instructions */
+  const clickOnConfig = () => setIsConfigInstructionsOpen(true);
+
   return (
     <PageContainer {...style.ContainerProps}>
+      {/* Config Instructions */}
+      <PlatformInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} textKey="howPlatformWork" stepsKey="instructions" preStepKey="" />
+
+      {/* Main Container */}
       <Box {...style.MainContainerProps}>
         <Grid container {...style.GridContainerProps}>
           <Grid item xs={12}>
@@ -57,12 +61,21 @@ const Login = () => {
             <Title title={t(`brand.sloganL3`)} />
           </Grid>
 
+          {/* INSTRUCTIONS */}
+          <Grid item xs={12} {...style.ShowInstructionsProps}>
+            <Link underline="none" color={'white'} variant="body1" {...style.LinkButtonProps} onClick={clickOnConfig}>
+              {t('showInstructions')}
+            </Link>
+          </Grid>
+
+          {/* CONTACT US */}
           <Grid item xs={12} {...style.ContactUseProps}>
-            <Link underline="none" color={'white'} variant='h6' onClick={clickOnContact}>
+            <Link underline="none" color={'white'} variant="body1" {...style.LinkButtonProps} onClick={clickOnContact}>
               {t('contactWithUs')}
             </Link>
           </Grid>
 
+          {/* LOGIN BUTTONS (GOOGLE, MS, ) */}
           <Grid item xs={12} {...style.LoginButtonProps}>
             <LoginButtonGoogle />
           </Grid>
@@ -73,6 +86,7 @@ const Login = () => {
             <LoginButtonFacebook />
           </Grid>
 
+          {/* CARROUSEL */}
           <Grid item xs={12} {...style.CarrouselContainerProps}>
             {isLogingIn ? <CircularProgress /> : <PolaroidCarrusel images={IMAGE_LIST} />}
           </Grid>

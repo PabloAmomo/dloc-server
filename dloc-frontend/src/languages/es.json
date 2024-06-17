@@ -63,6 +63,10 @@
     "pin": "Pin",
     "image": "Foto Mascota"
   },
+  "howPlatformWork": {
+    "title": "¿Como funciona la plataforma?",
+    "subtitle": "Para utilizar la plataforma MaiPet, solo necesitas adquirir un GPS del modelo GFS-22, disponible en Amazon, AliExpress y numerosos sitios web.\nUna vez que tengas el GPS, solo debes seguir unos sencillos pasos de configuración, y podrás rastrear a tu mascota fácilmente.\nA continuación, te dejo las instrucciones de configuración para que veas lo simple que es registrar una mascota en la plataforma."
+  },
   "instructions": {
     "instructions": "Instrucciones",
     "sendSMS": "Envía SMS",
@@ -139,8 +143,8 @@
   "confirmLogout": "¿Estás seguro que deseas cerrar la sesión?",
   "confirmLooseData": "¿Estás seguro que deseas salir sin guardar los cambios?",
   "connectivity": "Conectividad",
-  "contactUs": "Contacta...",
-  "contactWithUs": "👉👉 Contacta con nosotros... 👈👈",
+  "contactUs": "Contactanos",
+  "contactWithUs": "Contacta con nosotros...",
   "copy": "Copiar",
   "dateString": "{day}/{month}/{fullYear} {hour}:{minute}:{second}",
   "delete": "Borrar",
@@ -205,6 +209,7 @@
   "sharedWiths": "Mascota compartida con...",
   "shareNobody": "Mascota no compartida",
   "startIcon": "Icono de inicio de recorrido",
+  "showInstructions": "¿Como funciona la plataforma?",
   "termsAndConditions": "Términos y condiciones",
   "thePet": "La mascota",
   "yes": "Si"

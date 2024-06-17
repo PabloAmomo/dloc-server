@@ -3,7 +3,8 @@ import { Colors } from 'enums/Colors';
 
 const LoginStyle = {
   ContainerProps: { sx: { bottom: 0 } as SxProps },
-  ContactUseProps: { sx: { display: 'flex', justifyContent: 'center', cursor: 'pointer', mt:1, mb: 1 } as SxProps },
+  ContactUseProps: { sx: { display: 'flex', justifyContent: 'center', cursor: 'pointer', mb: 2 } as SxProps },
+  ShowInstructionsProps: { sx: { display: 'flex', justifyContent: 'center', cursor: 'pointer', mt: 1, mb: 1 } as SxProps },
   LoginButtonProps: { sx: { display: 'flex', justifyContent: 'center' } as SxProps },
   GridContainerProps: { spacing: 2, alignItems: 'center', sx: { mt: 0, maxHeight: '640px' } },
   titleProps: (sx: SxProps) => ({
@@ -54,6 +55,19 @@ const LoginStyle = {
         transform: 'translateY(-100%)',
         zIndex: 0,
       },
+    } as SxProps,
+  },
+
+  LinkButtonProps: {
+    sx: {
+      borderRadius: '8px',
+      backgroundColor: '#0000003b',
+      padding: '8px',
+      width: '34ch',
+      textAlign: 'center',
+      fontSize: '14px',
+      fontWeight: '100',
+      '&:hover': { backgroundColor: '#ffffff3b' },
     } as SxProps,
   },
 };
