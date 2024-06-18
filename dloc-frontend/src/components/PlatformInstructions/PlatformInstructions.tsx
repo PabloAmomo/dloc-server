@@ -4,22 +4,23 @@ import PlatformInstructionsSteps from 'components/PlatformInstructionsSteps/Plat
 import style from './PlatformInstructions.style';
 
 const PlatformInstructions = (props: PlatformInstructionsProps) => {
-  const { isOpen, setIsOpen, textKey, stepsKey, preStepKey } = props;
+  const { isOpen, setIsOpen, titleKey, stepsKey, preStepKey, titleImage } = props;
   const { t } = useTranslation();
   const handleClose = () => setIsOpen(false);
 
-  const showTitle = t(`${textKey}.title`) !== `${textKey}.title`;
+  const showTitle = t(`${titleKey}.title`) !== `${titleKey}.title`;
   const showSteps = t(`${stepsKey}.step0.title`) !== `${stepsKey}.step0.title`;
 
-  const subtitles = t(`${textKey}.subtitle`).split('\n');
+  const subtitles = t(`${titleKey}.subtitle`).split('\n');
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      {showTitle && <DialogTitle {...style.DialogTitleProps}>{t(`${textKey}.title`)}</DialogTitle>}
+      {showTitle && <DialogTitle {...style.DialogTitleProps}>{t(`${titleKey}.title`)}</DialogTitle>}
 
       <DialogContent>
         {showTitle && (
           <DialogContentText>
+            {titleImage && <p><center><img {...style.TitleImageProps} src={titleImage} alt="title" /></center></p>}
             {subtitles.map((text) => (
               <p>{text}</p>
             ))}
@@ -29,7 +30,7 @@ const PlatformInstructions = (props: PlatformInstructionsProps) => {
         {showSteps && <PlatformInstructionsSteps stepsKey={stepsKey} preStepKey={preStepKey} />}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} autoFocus>
+        <Button onClick={handleClose}>
           {t('close')}
         </Button>
       </DialogActions>
@@ -42,7 +43,8 @@ export default PlatformInstructions;
 interface PlatformInstructionsProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  textKey: string;
+  titleImage?: string;
+  titleKey: string;
   stepsKey: string;
   preStepKey: string;
 }

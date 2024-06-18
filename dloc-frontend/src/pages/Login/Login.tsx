@@ -51,7 +51,7 @@ const Login = () => {
   return (
     <PageContainer {...style.ContainerProps}>
       {/* Config Instructions */}
-      <PlatformInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} textKey="howPlatformWork" stepsKey="instructions" preStepKey="" />
+      <PlatformInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} titleKey="howPlatformWork" stepsKey="instructions" preStepKey="" titleImage='images/general/gf-22.jpeg' />
 
       {/* Main Container */}
       <Box {...style.MainContainerProps}>

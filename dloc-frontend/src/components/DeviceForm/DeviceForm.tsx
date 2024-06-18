@@ -191,7 +191,7 @@ const DeviceForm = (props: DeviceFormProps) => {
       <input type="file" id="deviceform-fileinputimage" onChange={handleFileInputImageChange} style={{ display: 'none' }} />
 
       {/* Config Instructions */}
-      <PlatformInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} textKey="instructions" stepsKey="instructions" preStepKey="instructions" />
+      <PlatformInstructions isOpen={isConfigInstructionsOpen} setIsOpen={setIsConfigInstructionsOpen} titleKey="instructions" stepsKey="instructions" preStepKey="instructions" />
 
       {/* Dialog Email Form */}
       <DialogEmailForm
