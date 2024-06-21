@@ -21,8 +21,8 @@ const PlatformInstructions = (props: PlatformInstructionsProps) => {
         {showTitle && (
           <DialogContentText>
             {titleImage && <p><center><img {...style.TitleImageProps} src={titleImage} alt="title" /></center></p>}
-            {subtitles.map((text) => (
-              <p>{text}</p>
+            {subtitles.map((text, index) => (
+              <p key={index}>{text}</p>
             ))}
           </DialogContentText>
         )}
