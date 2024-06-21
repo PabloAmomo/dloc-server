@@ -61,6 +61,8 @@ const useDeviceFormHook = (): UseDeviceFormHook => {
   }, [sharedDevice]);
 
   useEffect(() => {
+    if (!user.profile.email) return;
+
     /** Only check shared device if there is no shared device setted */
     if (sharedDevice) return;
 
@@ -74,7 +76,7 @@ const useDeviceFormHook = (): UseDeviceFormHook => {
     } catch (error: any) {
       logError('Error decoding base64 email', error);
     }
-
+    
     /** If there is a shared device, open the form */
     if (sharedDeviceItem && !sharedDeviceItem.error && toEmail.toLocaleLowerCase() === user.profile.email.toLocaleLowerCase()) {
       setSharedDevice(sharedDeviceItem);
@@ -87,7 +89,7 @@ const useDeviceFormHook = (): UseDeviceFormHook => {
     else if (sharedDeviceItem?.error) showAlert(t(`errors.invalidRequest`, { error: t(sharedDeviceItem.error) }), 'error');
 
     cleanQueryParams();
-  }, [searchParams]);
+  }, [searchParams, user]);
 
   /** Cancel the add or update process */
   const cancelSave = () => cancelProcess();
