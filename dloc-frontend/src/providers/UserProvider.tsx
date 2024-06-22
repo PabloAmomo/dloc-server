@@ -8,6 +8,7 @@ import getEmptyUser from 'functions/getEmptyUser';
 import logoutService from 'services/logout/logout';
 import useGetDevicesHook from '../hooks/GetDeviceHook';
 import { FacebookLoginClient } from '@greatsumini/react-facebook-login';
+import { useDevicesContext } from './DevicesProvider';
 
 const USER_STORAGE_KEY = 'user';
 
@@ -16,6 +17,7 @@ export function UserProvider({ children }: { children: any }) {
   const [isLogingIn, setIsLogingIn] = useState<boolean>(true);
   const [isAutoLogingIn, setIsAutoLogingIn] = useState<boolean>(true);
   const { getDevices } = useGetDevicesHook();
+  const { setDevices, devices } = useDevicesContext();
   const isLoggedIn = user.token !== '';
 
   const logout = () => {
@@ -43,6 +45,7 @@ export function UserProvider({ children }: { children: any }) {
     if (!isLoggedIn) {
       if (isAutoLogingIn) setIsAutoLogingIn(false);
       if (isLogingIn) setIsLogingIn(false);
+      if (devices && devices.length > 0) setDevices([]);
       return;
     }
 
