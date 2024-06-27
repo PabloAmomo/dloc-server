@@ -8,7 +8,7 @@ const routesLocation = express.Router();
 const handlePacket = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const imei: string = req.query?.id?.toString() ?? req.query?.imei?.toString() ?? '';
   const lat: number = parseFloat(req.query?.lat?.toString() ?? '') ?? NaN;
-  const lng: number = parseFloat(req.query?.lon?.toString() ?? '') ?? NaN;
+  const lng: number = parseFloat(req.query?.lon?.toString() ?? req.query?.lng?.toString() ?? '') ?? NaN;
   const timestamp: string = req.query?.timestamp?.toString() ?? '';
   const speedValue: string = req.query?.speed?.toString() ?? '0';
   const bearing: string = req.query?.bearing?.toString() ?? '';
